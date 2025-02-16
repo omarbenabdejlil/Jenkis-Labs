@@ -1,0 +1,79 @@
+
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'localhost:5000/my-python-app'
+        IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Prepare Workspace') {
+            steps {
+                // Remove the jenkins-project directory if it exists
+                sh 'rm -rf jenkins-project'
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                sh 'git clone https://github.com/kodekloudhub/jenkins-project.git'
+            }
+        }
+
+        stage('Set Up Environment') {
+            steps {
+                // Install libraries and packages required for build and tests
+                sh 'pip install -r jenkins-project/requirements.txt'
+            }
+        }
+
+        stage('Unit Testing') {
+            steps {
+                // Use pytest for unit testing
+                sh 'pytest'
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                // Use DockerHub credentials to login
+                withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
+                    sh "docker login -u max -p ${dockerhubpwd} localhost:5000"
+                    echo 'Login successfully'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo "Building Docker image ${IMAGE_TAG}"
+                    sh "docker build -t ${IMAGE_TAG} /root/jenkins-project/"
+                }
+            }
+        }
+        
+        stage('Approval Required') {
+            steps {
+                script {
+                    def userInput = input(id: 'userInput', message: 'Approve and Provide docker image', parameters: [
+                        string(name: 'DOCKER_IMAGE', defaultValue: 'defaultValue', description: 'Enter the docker image')
+                    ])
+                    env.DOCKER_IMAGE = userInput
+                }
+            }
+        }
+        
+        stage('Deploy Docker Image') {
+            steps {
+                script {
+                    echo "Deploying Docker image ${env.DOCKER_IMAGE}"
+                    sh "docker run -d ${env.DOCKER_IMAGE}"
+                }
+            }
+        }
+
+    }
+}
+    
