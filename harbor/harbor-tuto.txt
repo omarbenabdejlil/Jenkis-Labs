@@ -1,0 +1,14 @@
+ wget https://github.com/goharbor/harbor/releases/download/v1.10.17/harbor-online-installer-v1.10.17.tgz
+
+tar xzvf harbor-online-installer-v1.10.17.tgz
+cd harbor
+#change the dns and give the cert on the harbor config file harbor.yaml
+sudo ./install.sh
+
+# Login with user admin and default password Harbor12345 (You should change it by editing harbor.yaml file above).
+# in this step, first, we need to create a private project by clicking the NEW PROJECT button and the popup will be shown.
+ docker login registry.baohoi.com
+
+$ sudo docker tag nginx:alpine registry.baohoi.com/private/mynginx:alpine
+$ sudo docker push registry.baohoi.com/private/mynginx:alpine
+
