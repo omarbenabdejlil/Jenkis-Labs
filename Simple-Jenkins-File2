@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    environment {
+        IMAGE_NAME = 'localhost:5000/my-python-app'
+        IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    if (!fileExists('jenkins-project/.git')) {
+                        echo 'Cloning repository...'
+                        sh 'git clone https://github.com/kodekloudhub/jenkins-project.git'
+                    } else {
+                        echo 'Repository already exists, pulling latest changes...'
+                        sh 'cd jenkins-project && git reset --hard && git pull'
+                    }
+                }
+            }
+        }
+
+        stage('Set Up Environment') {
+            steps {
+                script {
+                    if (fileExists('jenkins-project/requirements.txt')) {
+                        sh 'pip install -r jenkins-project/requirements.txt'
+                    } else {
+                        error "requirements.txt not found! Check if the repo is cloned properly."
+                    }
+                }
+            }
+        }
+
+        stage('Unit Testing') {
+            steps {
+                sh 'cd jenkins-project && pytest'
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
+                    sh 'echo ${dockerhubpwd} | docker login -u max --password-stdin localhost:5000'
+                    echo 'Login successfully'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo "Building Docker image ${IMAGE_TAG}"
+                    sh "docker build -t ${IMAGE_TAG} jenkins-project/"
+                }
+            }
+        }
+    }
+}
+
