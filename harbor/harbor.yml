@@ -12,10 +12,10 @@ http:
 # https related config
 #https:
   # https port for harbor, default is 443
-  #  port: 443
+  #    port: 8443
   # The path of cert and key files for nginx
-  # certificate: /etc/letsencrypt/live/registry.feriel-pfe.com/fullchain.pem
-  #private_key: /etc/letsencrypt/live/registry.feriel-pfe.com/privkey.pem
+  #   certificate: /etc/letsencrypt/live/feriel-pfe.com/fullchain.pem
+  #  private_key: /etc/letsencrypt/live/feriel-pfe.com/privkey.pem
 
 # Uncomment external_url if you want to enable external proxy
 # And when it enabled the hostname will no longer used

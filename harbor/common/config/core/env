@@ -22,8 +22,8 @@ REGISTRY_URL=http://registry:5000
 TOKEN_SERVICE_URL=http://core:8080/service/token
 HARBOR_ADMIN_PASSWORD=omarferiel
 MAX_JOB_WORKERS=10
-CORE_SECRET=GS2lXFqOvZTIQPCi
-JOBSERVICE_SECRET=EsP3HMTGnekWh8bz
+CORE_SECRET=Ua7ke6meVLTBHevn
+JOBSERVICE_SECRET=d9NyIIIvjTloh93Z
 ADMIRAL_URL=
 WITH_NOTARY=False
 WITH_CLAIR=False
@@ -48,4 +48,4 @@ WITH_CHARTMUSEUM=False
 
 HTTP_PROXY=
 HTTPS_PROXY=
-NO_PROXY=portal,core,jobservice,127.0.0.1,postgresql,.internal,db,redis,chartmuseum,registryctl,registry,clair,nginx,.local,log,notary-server,localhost,notary-signer,clair-adapter
+NO_PROXY=db,redis,core,postgresql,clair,chartmuseum,notary-signer,localhost,.local,notary-server,.internal,clair-adapter,registry,127.0.0.1,log,jobservice,portal,nginx,registryctl

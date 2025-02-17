@@ -12,3 +12,10 @@ sudo ./install.sh
 $ sudo docker tag nginx:alpine registry.baohoi.com/private/mynginx:alpine
 $ sudo docker push registry.baohoi.com/private/mynginx:alpine
 
+
+
+# To configure wild card domain to be used under Haproxy , use this command , the config of Haproxyu is located under the file haproxy-config :
+sudo certbot certonly --manual --preferred-challenges=dns -d '*.feriel-pfe.com' -d 'feriel-pfe.com'
+
+
+# dont forget to add the acme TXT record to the OVH ----
