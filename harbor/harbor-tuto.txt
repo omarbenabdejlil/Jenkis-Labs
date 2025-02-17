@@ -18,4 +18,6 @@ $ sudo docker push registry.baohoi.com/private/mynginx:alpine
 sudo certbot certonly --manual --preferred-challenges=dns -d '*.feriel-pfe.com' -d 'feriel-pfe.com'
 
 
-# dont forget to add the acme TXT record to the OVH ----
+# dont forget to add the acme TXT record to the OVH ---
+#add this command also to generate ful intermidiate certif for the Haproxy "cat /etc/letsencrypt/live/feriel-pfe.com/fullchain.pem /etc/letsencrypt/live/feriel-pfe.com/privkey.pem > /etc/letsencrypt/live/feriel-pfe.com/haproxy.pem"
+
