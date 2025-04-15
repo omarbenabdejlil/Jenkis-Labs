@@ -1,0 +1,11 @@
+
+esc to get the Grub menu
+then press ctrl+e 
+
+find the linux line and add at the end of the logical volume :
+init=/bin/bash
+mount -o remount,rw /
+
+passwd $user
+sync
+reboot -f 
